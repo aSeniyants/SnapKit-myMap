@@ -18,8 +18,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         return map
     }()
     
-    
     let NaviButtonConfig = UIImage.SymbolConfiguration(pointSize: 38)
+    
+    var recordMode = false
+    var geoLocationArray: [CLLocationCoordinate2D] = []
 
     override func viewDidLoad() {
         setMapConstrains()
@@ -27,8 +29,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         super.viewDidLoad()
     }
 
-    @objc func buttonPush(sender: UIButton) {
-        print("push")
+    @objc func recordTrack(sender: UIButton) {
+        if recordMode == false {
+            print("rec start")
+            sender.setImage(UIImage(systemName: "stop.circle", withConfiguration: NaviButtonConfig)?.withTintColor(.red, renderingMode: .alwaysOriginal), for: .normal)
+        }else {
+            print("rec stop")
+            sender.setImage(UIImage(systemName: "record.circle", withConfiguration: NaviButtonConfig)?.withTintColor(.red, renderingMode: .alwaysOriginal), for: .normal)
+            APIManager.shared.writeTrack(name: "тестовый трек", locationsList: geoLocationArray)
+            geoLocationArray = []
+        }
+        recordMode = !recordMode
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -90,6 +101,33 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
+    @objc func regionToMyLocation() {
+        if let myLocation = locationManager.location?.coordinate{
+                    let region = MKCoordinateRegion(center: myLocation, latitudinalMeters: 1000, longitudinalMeters: 1000)
+                    mapView.setRegion(region, animated: true)
+                }else{
+                    print("позиция не обнаружена")
+                }
+    }
+    
+    @objc func regionPlus() {
+        if mapView.region.span.longitudeDelta > 0.002 {
+            mapView.setRegion(MKCoordinateRegion(center: mapView.region.center, span: MKCoordinateSpan(latitudeDelta: mapView.region.span.latitudeDelta / 2, longitudeDelta: mapView.region.span.longitudeDelta / 2)), animated: true)
+        }
+    }
+    
+    @objc func regionMinus() {
+        if mapView.region.span.longitudeDelta < 100 {
+            mapView.setRegion(MKCoordinateRegion(center: mapView.region.center, span: MKCoordinateSpan(latitudeDelta: mapView.region.span.latitudeDelta * 2, longitudeDelta: mapView.region.span.longitudeDelta * 2)), animated: true)
+        }
+    }
+    
+    @objc func getTracks() {
+        APIManager.shared.getTracks(completion: {elem in
+            print(elem)
+        })
+    }
+        
     func setNavigateBottonConstrains() {
         let NavigateView = UIView()
         view.addSubview(NavigateView)
@@ -106,7 +144,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         buttonPlus.setImage(UIImage(systemName: "plus", withConfiguration: NaviButtonConfig)?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
         buttonPlus.layer.cornerRadius = 25
         buttonPlus.backgroundColor = .white
-        buttonPlus.addTarget(self, action: #selector(buttonPush), for: .touchUpInside)
+        buttonPlus.addTarget(self, action: #selector(regionPlus), for: .touchUpInside)
         NavigateView.addSubview(buttonPlus)
         buttonPlus.snp.makeConstraints{maker in
             maker.right.equalTo(0)
@@ -117,7 +155,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         buttonMinus.setImage(UIImage(systemName: "minus", withConfiguration: NaviButtonConfig)?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
         buttonMinus.layer.cornerRadius = 25
         buttonMinus.backgroundColor = .white
-        buttonMinus.addTarget(self, action: #selector(buttonPush), for: .touchUpInside)
+        buttonMinus.addTarget(self, action: #selector(regionMinus), for: .touchUpInside)
         NavigateView.addSubview(buttonMinus)
         buttonMinus.snp.makeConstraints{maker in
             maker.top.equalTo(buttonPlus.snp.bottom).offset(5)
@@ -129,7 +167,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         buttonLocation.setImage(UIImage(systemName: "location.north", withConfiguration: NaviButtonConfig)?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
         buttonLocation.layer.cornerRadius = 25
         buttonLocation.backgroundColor = .white
-        buttonLocation.addTarget(self, action: #selector(buttonPush), for: .touchUpInside)
+        buttonLocation.addTarget(self, action: #selector(regionToMyLocation), for: .touchUpInside)
         NavigateView.addSubview(buttonLocation)
         buttonLocation.snp.makeConstraints{maker in
             maker.top.equalTo(buttonMinus.snp.bottom).offset(5)
@@ -141,7 +179,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         buttonRec.setImage(UIImage(systemName: "record.circle", withConfiguration: NaviButtonConfig)?.withTintColor(.red, renderingMode: .alwaysOriginal), for: .normal)
         buttonRec.layer.cornerRadius = 25
         buttonRec.backgroundColor = .white
-        buttonRec.addTarget(self, action: #selector(buttonPush), for: .touchUpInside)
+        buttonRec.addTarget(self, action: #selector(recordTrack), for: .touchUpInside)
         NavigateView.addSubview(buttonRec)
         buttonRec.snp.makeConstraints{maker in
             maker.top.equalTo(buttonLocation.snp.bottom).offset(5)
@@ -153,7 +191,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         buttonList.setImage(UIImage(systemName: "list.triangle", withConfiguration: NaviButtonConfig)?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
         buttonList.layer.cornerRadius = 5
         buttonList.backgroundColor = .white
-        buttonList.addTarget(self, action: #selector(buttonPush), for: .touchUpInside)
+        buttonList.addTarget(self, action: #selector(getTracks), for: .touchUpInside)
         view.addSubview(buttonList)
         buttonList.snp.makeConstraints{maker in
 //            maker.top.equalTo(buttonRec.snp.bottom).offset(5)
@@ -162,12 +200,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             maker.height.width.equalTo(50)
         }
     }
-
 }
 
 extension ViewController {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let location = locations.last?.coordinate
-        print(location)
+        if recordMode == true {
+            guard let location = locations.last?.coordinate else { print("nil"); return}
+            geoLocationArray.append(location)
+            print(geoLocationArray.count)
+        }
     }
 }

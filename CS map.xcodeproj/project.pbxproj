@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		2055992428665057004F1C3C /* BagToFix.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2055992328665057004F1C3C /* BagToFix.strings */; };
+		205EE4AA287CBFD70035A302 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 205EE4A9287CBFD70035A302 /* GoogleService-Info.plist */; };
+		20785B72287B786400C210B2 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20785B71287B786400C210B2 /* APIManager.swift */; };
+		20785B74287B78E700C210B2 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20785B73287B78E700C210B2 /* Model.swift */; };
 		20A5B5B52864F34800179F60 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A5B5B42864F34800179F60 /* AppDelegate.swift */; };
 		20A5B5B72864F34800179F60 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A5B5B62864F34800179F60 /* SceneDelegate.swift */; };
 		20A5B5B92864F34800179F60 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A5B5B82864F34800179F60 /* ViewController.swift */; };
@@ -19,6 +22,9 @@
 /* Begin PBXFileReference section */
 		0C057967ACB593B7E54C5B29 /* Pods-CS map.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CS map.debug.xcconfig"; path = "Target Support Files/Pods-CS map/Pods-CS map.debug.xcconfig"; sourceTree = "<group>"; };
 		2055992328665057004F1C3C /* BagToFix.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = BagToFix.strings; sourceTree = "<group>"; };
+		205EE4A9287CBFD70035A302 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		20785B71287B786400C210B2 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		20785B73287B78E700C210B2 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		20A5B5B12864F34800179F60 /* CS map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CS map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		20A5B5B42864F34800179F60 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		20A5B5B62864F34800179F60 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -65,7 +71,10 @@
 			children = (
 				20A5B5B42864F34800179F60 /* AppDelegate.swift */,
 				20A5B5B62864F34800179F60 /* SceneDelegate.swift */,
+				205EE4A9287CBFD70035A302 /* GoogleService-Info.plist */,
 				20A5B5B82864F34800179F60 /* ViewController.swift */,
+				20785B71287B786400C210B2 /* APIManager.swift */,
+				20785B73287B78E700C210B2 /* Model.swift */,
 				20A5B5BD2864F35000179F60 /* Assets.xcassets */,
 				2055992328665057004F1C3C /* BagToFix.strings */,
 				20A5B5BF2864F35000179F60 /* LaunchScreen.storyboard */,
@@ -152,6 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2055992428665057004F1C3C /* BagToFix.strings in Resources */,
+				205EE4AA287CBFD70035A302 /* GoogleService-Info.plist in Resources */,
 				20A5B5C12864F35000179F60 /* LaunchScreen.storyboard in Resources */,
 				20A5B5BE2864F35000179F60 /* Assets.xcassets in Resources */,
 			);
@@ -206,6 +216,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				20785B74287B78E700C210B2 /* Model.swift in Sources */,
+				20785B72287B786400C210B2 /* APIManager.swift in Sources */,
 				20A5B5B92864F34800179F60 /* ViewController.swift in Sources */,
 				20A5B5B52864F34800179F60 /* AppDelegate.swift in Sources */,
 				20A5B5B72864F34800179F60 /* SceneDelegate.swift in Sources */,
