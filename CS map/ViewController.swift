@@ -42,6 +42,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         recordMode = !recordMode
     }
     
+    @objc func gotoTrackListViewController(sender: UIButton) {
+        let controller: UIViewController = TrackListViewController()
+        controller.modalPresentationStyle = .automatic
+//        navigationController?.pushViewController(controller, animated: true)
+        self.present(controller, animated: true)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
             super.viewDidAppear(animated)
             checkLocationEnabled()
@@ -191,7 +198,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         buttonList.setImage(UIImage(systemName: "list.triangle", withConfiguration: NaviButtonConfig)?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
         buttonList.layer.cornerRadius = 5
         buttonList.backgroundColor = .white
-        buttonList.addTarget(self, action: #selector(getTracks), for: .touchUpInside)
+        buttonList.addTarget(self, action: #selector(gotoTrackListViewController), for: .touchUpInside)
         view.addSubview(buttonList)
         buttonList.snp.makeConstraints{maker in
 //            maker.top.equalTo(buttonRec.snp.bottom).offset(5)
